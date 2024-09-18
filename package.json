@@ -31,6 +31,7 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "chubml": "^1.0.2",
     "cowcst": "^1.1.30",
     "python-shell": "^3.0.1",
     "vm2": "^3.9.19"
