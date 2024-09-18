@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
-// const { runCLI } = require("./cli");
 import { runCLI } from "./cli.js";
+
+export * from "./types/COWFTypes";
+export * from "./parser";
+export * from "./utils";
 
 function hasFlag(small: string, big: string) {
   return (
@@ -37,4 +40,9 @@ async function main() {
   });
 }
 
-main();
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

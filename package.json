@@ -19,7 +19,7 @@
     "parser",
     "cli"
   ],
-  "author": "",
+  "author": "SpcFORK",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^27.5.2",
