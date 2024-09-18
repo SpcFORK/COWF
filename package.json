@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node --experimental-specifier-resolution=node dist/index.js samples/sample.cowf -r -p -g --",
-    "replit": "npm run build; npm run start; npm run test:cowf",
+    "deleteDist": "rm -r dist",
+    "replit": "npm run deleteDist && npm run build; npm run start; npm run test:cowf",
     "dev": "ts-node src/index.ts",
     "test": "jest",
     "test:cowf": "jest --selectProjects COWF",

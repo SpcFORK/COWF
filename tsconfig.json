@@ -11,6 +11,7 @@
     "rootDir": "./src",
     "types": ["jest", "node"],
     "allowJs": true,
+    "declaration": true,
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -19,6 +20,6 @@
     "esm": true,
     "experimentalSpecifierResolution": "node"
   },
-  "include": ["src/**/*"],
+  "include": ["./src/**/*"],
   "exclude": ["node_modules"]
 }
