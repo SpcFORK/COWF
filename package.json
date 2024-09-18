@@ -1,8 +1,15 @@
 {
-  "name": "cowf-parser",
+  "name": "cowf-mf",
   "version": "1.0.0",
   "description": "COWF Parser and CLI Tool",
   "main": "dist/index.js",
+  "files": [
+    "dist",
+    "src",
+    "docs",
+    "LICENCE",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "node --experimental-specifier-resolution=node dist/index.js samples/sample.cowf -r -p -g --",
@@ -35,6 +42,6 @@
     "chubml": "^1.0.2",
     "cowcst": "^1.1.30",
     "python-shell": "^3.0.1",
-    "vm2": "^3.9.19"
+    "vm-browserify": "^1.1.2"
   }
 }

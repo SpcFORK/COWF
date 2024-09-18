@@ -1,5 +1,7 @@
+import * as vm from "vm";
+import * as bvm from "vm-browserify";
+
 import { NOOP } from "cowcst";
-import { VM } from "vm2";
 import { COWFParseResult, COWFEnvScope } from "../types/COWFTypes";
 
 export type JSParserResult = COWFParseResult<string>;
@@ -10,7 +12,7 @@ export class JSParser {
     this.setupScope();
   }
 
-  static ext = "jsf"
+  static ext = "jsf";
   static createEnvScope(): JSParserEnv {
     return {
       scope: this.ext,
@@ -28,13 +30,23 @@ export class JSParser {
   }
 
   parse(content: string): JSParserResult {
-    const vm = new VM({
-      sandbox: this.makeSandbox(),
-    });
-    return this.pushToScope({
-      format: "result",
-      content: vm.run(content) || this.setupScope(),
-    });
+    const doVMParse = (
+      vm: typeof import("vm") | typeof import("vm-browserify"),
+    ) => {
+      const scriptRes = new vm.Script(content).runInContext(
+        vm.createContext(this.makeSandbox()),
+      );
+      return this.pushToScope({
+        format: "result",
+        content: scriptRes || this.setupScope(),
+      });
+    };
+
+    try {
+      return doVMParse(vm);
+    } catch {
+      return doVMParse(bvm);
+    }
   }
 
   pushVar(v: any) {

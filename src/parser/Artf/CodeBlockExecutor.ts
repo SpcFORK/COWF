@@ -1,5 +1,8 @@
 import { Options, PythonShell } from "python-shell";
-import { VM, VMOptions } from "vm2";
+
+import * as vm from "vm";
+import * as bvm from "vm-browserify";
+
 import { SubroutineManager } from "./SubroutineManager";
 import { ExecutableBlock, StackItem, Block } from "./types";
 
@@ -129,12 +132,22 @@ print_original(json.dumps({"result": result, "output": output.strip()}))
       });
     }
 
-    const vm = new VM({ sandbox });
-    return vm.run(this.createJSBoilerplate(code));
+    const doVMParse = (
+      vm: typeof import("vm") | typeof import("vm-browserify"),
+    ) => {
+      const script = new vm.Script(this.createJSBoilerplate(code));
+      return script.runInContext(vm.createContext(sandbox));
+    };
+
+    try {
+      return doVMParse(vm);
+    } catch {
+      return doVMParse(bvm);
+    }
   }
 
   private makeJSEnv(context: Record<string, any>): Record<string, any> {
-    return <VMOptions["sandbox"]>Object.assign(
+    return Object.assign(
       this.isGlobal ? globalThis : {},
       {
         console: console,
