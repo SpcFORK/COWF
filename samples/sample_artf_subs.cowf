@@ -1,0 +1,25 @@
+=) artf
+
+--- SomeRoutine x
+=# aValue x
+
+$> AsyncSubroutine // Await, can be called with `:>` still to call without waiting
+@@ // Break Statement
+
+=# neverMade 0
+---
+
+--- $ AsyncSubroutine
+
+  =# i 0
+  
+  $> for(SingleLineRoutine1, SingleLineRoutine2)
+  
+  --> SingleLineRoutine1 i < 0
+  
+  --> SingleLineRoutine2
+  =$ ++i
+
+---
+
+:> SomeRoutine 1

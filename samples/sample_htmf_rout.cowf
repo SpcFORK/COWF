@@ -1,0 +1,22 @@
+=) htmf
+
+=> Doc html lang="en"
+=> Head head
+=> Body body
+<+ Doc Head Body
+
+=> Title title
+<+ Head Title
+Hello, COWF!
+
+=> Content p
+<+ Body Content
+This is a sample COWF file demonstrating Htmf format.
+
+=) rout
+
+=. page "/"
++. index_page page "index.html"
++. style_css page "styles.css"
+
+=> /* @index_page

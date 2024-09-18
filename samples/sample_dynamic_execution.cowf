@@ -1,0 +1,28 @@
+=) artf
+
+=# x 10
+=# y 5
+
+== JavaScript
+console.log("Basic arithmetic:");
+console.log("x + y =", x + y);
+console.log("x - y =", x - y);
+console.log("x * y =", x * y);
+console.log("x / y =", x / y);
+==
+
+== JavaScript
+console.log("Testing error handling:");
+throw new Error("This is a test error");
+==
+
+== Python
+print("This is a Python code block")
+print(f"It should not be executed, but recognized")
+==
+
+== Unknown
+console.log("This block has an unknown language")
+==
+
+$= result "Dynamic execution test complete"

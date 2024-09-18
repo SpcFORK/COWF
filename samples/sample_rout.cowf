@@ -1,0 +1,7 @@
+=) rout
+
+=. page "/"
++. index_page page "index.html"
++. style_css page "styles.css"
+
+=> /* @index_page

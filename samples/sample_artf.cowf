@@ -1,0 +1,17 @@
+=) artf
+
+=# x 5
+=# y 3
+
+== JavaScript
+console.log("Executing JavaScript code block");
+console.log("x + y =", x + y);
+==
+
+== Python
+print("Executing Python-like code block")
+result = x * y
+print(f"x * y = {result}")
+==
+
+$= message "Dynamic execution complete!"

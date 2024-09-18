@@ -1,0 +1,42 @@
+=) txt
+This is a large text section with multiple lines.
+It contains various content to simulate a real-world scenario.
+This content is repeated multiple times to create a large file.
+${Array(1000).fill('Lorem ipsum dolor sit amet, consectetur adipiscing elit.').join('\n')}
+
+=) cjml
+key1: value1;
+key2: {
+  nested_key: nested_value;
+  another_key: another_value;
+}
+${Array(1000).fill('repeated_key: repeated_value;').join('\n')}
+
+=) artf
+=# x 1000
+=. pi 3.14159
+=$ message "This is a test message"
+=] array 1 2 3 4 5
+== JavaScript
+console.log(x * pi);
+console.log(message);
+console.log(array.reduce((a, b) => a + b, 0));
+==
+${Array(1000).fill('=# y 1\n=. z 2.0\n=$ msg "Repeated message"\n=] arr 10 20 30').join('\n')}
+
+=) htmf
+=> root div id="app"
+=> header h1
+Large COWF File Test
+<+ root header
+=> content div class="content"
+This is a test of parsing a large COWF file.
+<+ root content
+${Array(1000).fill('=> item div class="item"\nRepeated item\n<+ content item').join('\n')}
+
+=) rout
+=. home "/"
++. header /components/header.html
++. footer /components/footer.html
+=> render_template('home.html')
+${Array(1000).fill('=. route_${i} "/route_${i}"\n+. component /components/component_${i}.html\n=> render_template("route_${i}.html")').join('\n')}

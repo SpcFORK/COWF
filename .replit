@@ -1,0 +1,75 @@
+modules = ["nodejs-20"]
+run = "npm run replit"
+
+[nix]
+channel = "stable-24_05"
+
+
+[workflows]
+runButton = "Build and Test Artf"
+
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run replit"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Run COWF Tests"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Run Artf Tests"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Build and Test Artf"
+
+
+[[workflows.workflow]]
+name = "Run COWF Tests"
+mode = "parallel"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run test:cowf"
+
+
+[[workflows.workflow]]
+name = "Run Artf Tests"
+mode = "parallel"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run test:artf"
+
+[[workflows.workflow]]
+name = "Build and Test Artf"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run replit"
+
+
+[deployment]
+run = ["sh", "-c", "npm run replit"]

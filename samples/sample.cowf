@@ -1,0 +1,18 @@
+=) artf
+
+=# x 10
+=# y 20
+
+== JavaScript Test
+console.log("The sum of x and y is:", x + y);
+console.log("The product of x and y is:", x * y);
+==
+
+--- AmReg
+
+---
+
+=$ message "Hello, COWF!"
+
+:> Test
+:> AmReg
