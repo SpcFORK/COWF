@@ -5,20 +5,30 @@ const cowcst_1 = require("cowcst");
 const python_shell_1 = require("python-shell");
 class PYParser {
     constructor(ENV = cowcst_1.NOOP) {
-        var _a;
         this.ENV = ENV;
-        (_a = ENV()).py || (_a.py = PYParser.createEnvScope());
+        this.setupScope();
     }
     static createEnvScope() {
         return {
-            scope: "py",
-            value: []
+            scope: this.ext,
+            value: [],
         };
     }
-    async parse(content) {
+    setupScope() {
+        var _a;
+        return ((_a = this.ENV()).py || (_a.py = PYParser.createEnvScope()));
+    }
+    pushToScope(content) {
+        this.setupScope().value.push(content);
+        return content;
+    }
+    parse(content) {
         try {
-            const results = await this.runPythonShell(content, this.ENV());
-            return results ? results.join("\n") : "";
+            const results = this.runPythonShell(content, this.ENV());
+            return this.pushToScope({
+                format: "result",
+                content: results.then((t) => (t ? t.join("\n") : "")),
+            });
         }
         catch (err) {
             throw err;
@@ -35,3 +45,4 @@ class PYParser {
     }
 }
 exports.PYParser = PYParser;
+PYParser.ext = "pyf";

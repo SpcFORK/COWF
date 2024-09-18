@@ -34,6 +34,7 @@ export async function runCLI(
     let sectionCount = 0;
     let results: string[] = [];
     for await (const result of resultGenerator) {
+      const res = { result, env: parser.ENV };
       sectionCount++;
 
       if (options.verbose) {
@@ -41,11 +42,11 @@ export async function runCLI(
       }
 
       if (options.logResult) {
-        console.log(result);
+        console.log(res);
       }
 
       if (options.results) {
-        results.push(JSON.stringify(result, null, options.pretty ? 2 : 0));
+        results.push(JSON.stringify(res, null, options.pretty ? 2 : 0));
       }
 
       // Handle ARTF parsing with specified language

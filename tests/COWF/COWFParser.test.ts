@@ -11,6 +11,12 @@ Hello, world!
 =# b 7
 a + b
 
+=) js
+
+const a = 23;
+const b = 7;
+console.log(a + b);
+
 =) yaml
 
 key1: value1

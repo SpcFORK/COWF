@@ -16,6 +16,21 @@ class RoutParser {
         this.ENV = ENV;
         this.routes = [];
         this.currentRoute = null;
+        this.setupScope();
+    }
+    static createEnvScope() {
+        return {
+            scope: this.ext,
+            value: [],
+        };
+    }
+    setupScope() {
+        var _a;
+        return ((_a = this.ENV()).rout || (_a.rout = RoutParser.createEnvScope()));
+    }
+    pushToScope(content) {
+        this.setupScope().value.push(content);
+        return content;
     }
     parse(content) {
         const lines = content.trim().split("\n");
@@ -32,10 +47,10 @@ class RoutParser {
             else if (trimmedLine.startsWith("=>"))
                 this.handleRoutingDirective(trimmedLine);
         }
-        return {
-            format: "rout",
+        return this.pushToScope({
+            format: RoutParser.ext,
             content: this.routes,
-        };
+        });
     }
     parseRoute(line) {
         const [_, name, path] = line.split(" ");
@@ -57,3 +72,4 @@ class RoutParser {
     }
 }
 exports.RoutParser = RoutParser;
+RoutParser.ext = "rout";

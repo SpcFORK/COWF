@@ -4,13 +4,20 @@ exports.YamlParser = void 0;
 const cowcst_1 = require("cowcst");
 class YamlParser {
     constructor(ENV = cowcst_1.NOOP) {
-        var _a;
         this.ENV = ENV;
-        (_a = ENV()).yaml || (_a.yaml = YamlParser.createEnvScope());
+        this.setupScope();
+    }
+    setupScope() {
+        var _a;
+        return ((_a = this.ENV()).yaml || (_a.yaml = YamlParser.createEnvScope()));
+    }
+    pushToScope(content) {
+        this.setupScope().value.push(content);
+        return content;
     }
     static createEnvScope() {
         return {
-            scope: "yaml",
+            scope: this.ext,
             value: [],
         };
     }
@@ -41,10 +48,10 @@ class YamlParser {
                 currentIndent = indentLevel;
             }
         }
-        return {
-            format: "yaml",
+        return this.pushToScope({
+            format: YamlParser.ext,
             content: result,
-        };
+        });
     }
     parseValue(value) {
         if (value === "")
@@ -63,3 +70,4 @@ class YamlParser {
     }
 }
 exports.YamlParser = YamlParser;
+YamlParser.ext = "yaml";

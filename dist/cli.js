@@ -24,15 +24,16 @@ async function runCLI(filePath, options = {}) {
         let sectionCount = 0;
         let results = [];
         for await (const result of resultGenerator) {
+            const res = { result, env: parser.ENV };
             sectionCount++;
             if (options.verbose) {
                 console.log(`Parsed section ${sectionCount}:`);
             }
             if (options.logResult) {
-                console.log(result);
+                console.log(res);
             }
             if (options.results) {
-                results.push(JSON.stringify(result, null, options.pretty ? 2 : 0));
+                results.push(JSON.stringify(res, null, options.pretty ? 2 : 0));
             }
             // Handle ARTF parsing with specified language
             if (result.format === "artf" && options.language) {

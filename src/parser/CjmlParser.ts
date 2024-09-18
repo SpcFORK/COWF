@@ -2,11 +2,12 @@ import { NOOP } from "cowcst";
 import { COWFParseResult } from "../types/COWFTypes";
 
 export type CjmlContent = Record<string, any>;
+export type CjmlParserResult = COWFParseResult<CjmlContent>;
 
 export class CjmlParser {
   constructor(public ENV: () => Record<string, any> = NOOP) {}
 
-  parse(content: string): COWFParseResult<CjmlContent> {
+  parse(content: string): CjmlParserResult {
     const lines = content.trim().split("\n");
     const result: { [key: string]: any } = {};
     let currentObject: { [key: string]: any } = result;

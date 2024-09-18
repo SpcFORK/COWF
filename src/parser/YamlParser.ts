@@ -1,23 +1,40 @@
 import { NOOP } from "cowcst";
 import { COWFEnvScope, COWFParseResult } from "../types/COWFTypes";
 
+export type YamlParserKeys = {
+  [key: string]: any;
+};
+
+export type YamlParserResult = COWFParseResult<YamlParserKeys>;
+export type YamlParserEnv = COWFEnvScope<YamlParserResult[]>;
+
 export class YamlParser {
   constructor(public ENV: () => Record<string, any> = NOOP) {
-    ENV().yaml ||= YamlParser.createEnvScope();
+    this.setupScope();
   }
 
-  static createEnvScope(): COWFEnvScope<COWFParseResult<any>> {
+  setupScope(): YamlParserEnv {
+    return (this.ENV().yaml ||= YamlParser.createEnvScope());
+  }
+
+  pushToScope(content: YamlParserResult): YamlParserResult {
+    this.setupScope().value.push(content);
+    return content;
+  }
+
+  static ext = "yaml";
+  static createEnvScope(): YamlParserEnv {
     return {
-      scope: "yaml",
-      value: <any>[],
+      scope: this.ext,
+      value: [],
     };
   }
 
-  parse(content: string): COWFParseResult {
+  parse(content: string): YamlParserResult {
     const lines = content.trim().split("\n");
-    const result: { [key: string]: any } = {};
-    let currentObject: { [key: string]: any } = result;
-    let indentStack: { [key: string]: any }[] = [result];
+    const result: YamlParserKeys = {};
+    let currentObject: YamlParserKeys = result;
+    let indentStack: YamlParserKeys[] = [result];
     let currentIndent = 0;
 
     for (const line of lines) {
@@ -35,7 +52,7 @@ export class YamlParser {
           ] = {};
         } else if (indentLevel < currentIndent) {
           while (indentLevel < currentIndent) {
-            currentObject = indentStack.pop() as { [key: string]: any };
+            currentObject = indentStack.pop() as YamlParserKeys;
             currentIndent -= 2;
           }
         }
@@ -45,10 +62,10 @@ export class YamlParser {
       }
     }
 
-    return {
-      format: "yaml",
+    return this.pushToScope({
+      format: YamlParser.ext,
       content: result,
-    };
+    });
   }
 
   private parseValue(value: string): any {

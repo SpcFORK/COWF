@@ -1,6 +1,8 @@
 import { CowScope } from "./COWS_scope";
 import { CowNode } from "./COWS_node";
 
+export type CowNodeLike = [string, number, number];
+
 export class CowSM {
   stack: CowNode[] = [];
   i: number = 0;
@@ -9,17 +11,13 @@ export class CowSM {
     return new CowNode(code, thisReg, nextReg, this.stack);
   }
 
-  load(stack: CowNode[] | [string, number, number][]) {
-    if (!stack.every((element: any) => Array.isArray(element))) {
+  load(stack: CowNode[] | CowNodeLike[]) {
+    if (!Array.isArray(stack[0])) {
       for (const node of stack as CowNode[]) {
         this.createInstruction(node.code, node.thisReg, node.nextReg);
       }
     } else {
-      for (const [code, thisReg, nextReg] of stack as [
-        string,
-        number,
-        number,
-      ][]) {
+      for (const [code, thisReg, nextReg] of stack as CowNodeLike[]) {
         this.createInstruction(code, thisReg, nextReg);
       }
     }

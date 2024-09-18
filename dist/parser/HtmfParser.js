@@ -4,18 +4,25 @@ exports.HtmfParser = void 0;
 const cowcst_1 = require("cowcst");
 class HtmfParser {
     constructor(ENV = cowcst_1.NOOP) {
-        var _a;
         this.ENV = ENV;
         this.root = null;
         this.currentElement = null;
         this.elementMap = new Map();
-        (_a = ENV()).ctxt || (_a.ctxt = HtmfParser.createEnvScope());
+        this.setupScope();
     }
     static createEnvScope() {
         return {
             scope: "htmf",
             value: [],
         };
+    }
+    setupScope() {
+        var _a;
+        return ((_a = this.ENV()).htmf || (_a.htmf = HtmfParser.createEnvScope()));
+    }
+    pushToScope(content) {
+        this.setupScope().value.push(content);
+        return content;
     }
     parse(content) {
         const lines = content.trim().split("\n");
@@ -33,10 +40,10 @@ class HtmfParser {
             else
                 this.addContent(trimmedLine);
         }
-        return {
+        return this.pushToScope({
             format: "htmf",
             content: this.root,
-        };
+        });
     }
     parseElement(line) {
         const [_, name, tag, ...attrParts] = line.split(" ");

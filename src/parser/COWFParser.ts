@@ -15,7 +15,7 @@ export class COWFParser {
   private circularBuffer: string[] = new Array(20).fill("");
   private currentBufferIndex: number = 0;
 
-  private ENV: Record<string, any> = {};
+  ENV: Record<string, any> = {};
 
   static parsersMap = {
     txt: CtxtParser,
@@ -28,8 +28,9 @@ export class COWFParser {
   };
 
   constructor() {
-    Object.entries(COWFParser.parsersMap).forEach(([format, ParserClass]: any[]) =>
-      this.parsers.set(format as COWFFormat, new ParserClass(() => this.ENV)),
+    Object.entries(COWFParser.parsersMap).forEach(
+      ([format, ParserClass]: any[]) =>
+        this.parsers.set(format as COWFFormat, new ParserClass(() => this.ENV)),
     );
   }
 

@@ -18,25 +18,25 @@ describe("CtxtParser", () => {
 
   test("should parse simple text content", () => {
     const result = parser.parse(content1);
-    expect(result.format).toBe("txt");
+    expect(result.format).toBe("ctxt");
     expect(result.content).toBe(content1);
   });
 
   test("should handle multi-line text content", () => {
     const result = parser.parse(content2);
-    expect(result.format).toBe("txt");
+    expect(result.format).toBe("ctxt");
     expect(result.content).toBe(content2);
   });
 
   test("should trim leading and trailing whitespace", () => {
     const result = parser.parse(content3);
-    expect(result.format).toBe("txt");
+    expect(result.format).toBe("ctxt");
     expect(result.content).toBe(content1);
   });
 
   test("should return empty string for empty input", () => {
     const result = parser.parse(content4);
-    expect(result.format).toBe("txt");
+    expect(result.format).toBe("ctxt");
     expect(result.content).toBe("");
   });
 });

@@ -1,5 +1,5 @@
 import { NOOP } from "cowcst";
-import { COWFParseResult } from "../types/COWFTypes";
+import { COWFEnvScope, COWFParseResult } from "../types/COWFTypes";
 
 export class Route {
   constructor(
@@ -13,13 +13,35 @@ export class Route {
 
 export type RoutContent = string | Route[];
 
+export type RoutParserResult = COWFParseResult<RoutContent>;
+export type RoutParserEnv = COWFEnvScope<RoutParserResult[]>;
+
 export class RoutParser {
   private routes: Route[] = [];
   private currentRoute: Route | null = null;
 
-  constructor(public ENV: () => Record<string, any> = NOOP) {}
+  constructor(public ENV: () => Record<string, any> = NOOP) {
+    this.setupScope();
+  }
 
-  parse(content: string): COWFParseResult {
+  static ext = "rout"
+  static createEnvScope(): RoutParserEnv {
+    return {
+      scope: this.ext,
+      value: [],
+    };
+  }
+
+  setupScope(): RoutParserEnv {
+    return (this.ENV().rout ||= RoutParser.createEnvScope());
+  }
+
+  pushToScope(content: RoutParserResult): RoutParserResult {
+    this.setupScope().value.push(content);
+    return content;
+  }
+
+  parse(content: string): RoutParserResult {
     const lines = content.trim().split("\n");
     this.routes = [];
     this.currentRoute = null;
@@ -34,10 +56,10 @@ export class RoutParser {
         this.handleRoutingDirective(trimmedLine);
     }
 
-    return {
-      format: "rout",
+    return this.pushToScope({
+      format: RoutParser.ext,
       content: this.routes,
-    };
+    });
   }
 
   private parseRoute(line: string): void {

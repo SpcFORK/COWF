@@ -11,23 +11,35 @@ export interface HtmfElement {
 
 export type HtmfContent = string | HtmfElement[];
 
+export type HtmfParserResult = COWFParseResult<HtmfContent>;
+export type HtmfParserEnv = COWFEnvScope<HtmfParserResult[]>;
+
 export class HtmfParser {
   private root: HtmfElement | null = null;
   private currentElement: HtmfElement | null = null;
   private elementMap: Map<string, HtmfElement> = new Map();
 
   constructor(public ENV: () => Record<string, any> = NOOP) {
-    ENV().ctxt ||= HtmfParser.createEnvScope();
+    this.setupScope();
   }
 
-  static createEnvScope(): COWFEnvScope<COWFParseResult<string>[]> {
+  static createEnvScope(): HtmfParserEnv {
     return {
       scope: "htmf",
       value: [],
     };
   }
 
-  parse(content: string): COWFParseResult<HtmfContent> {
+  setupScope(): HtmfParserEnv {
+    return (this.ENV().htmf ||= HtmfParser.createEnvScope());
+  }
+
+  pushToScope(content: HtmfParserResult): HtmfParserResult {
+    this.setupScope().value.push(content);
+    return content;
+  }
+
+  parse(content: string): HtmfParserResult {
     const lines = content.trim().split("\n");
     this.root = null;
     this.currentElement = null;
@@ -42,10 +54,10 @@ export class HtmfParser {
       else this.addContent(trimmedLine);
     }
 
-    return {
+    return this.pushToScope({
       format: "htmf",
       content: <any>this.root,
-    };
+    });
   }
 
   private parseElement(line: string): void {

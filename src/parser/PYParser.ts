@@ -1,22 +1,39 @@
 import { NOOP } from "cowcst";
 import { PythonShell, PythonShellError } from "python-shell";
+import { COWFParseResult, COWFEnvScope } from "../types/COWFTypes";
+
+export type PYParserResult = COWFParseResult<Promise<string>>;
+export type PYParserEnv = COWFEnvScope<PYParserResult[]>;
 
 export class PYParser {
   constructor(public ENV: () => Record<string, any> = NOOP) {
-    ENV().py ||= PYParser.createEnvScope();
+    this.setupScope();
   }
 
-  static createEnvScope(): Record<string, any> {
+  static ext = "pyf"
+  static createEnvScope(): PYParserEnv {
     return {
-      scope: "py",
-      value: []
-    }
+      scope: this.ext,
+      value: [],
+    };
   }
 
-  async parse(content: string): Promise<any> {
+  setupScope(): PYParserEnv {
+    return (this.ENV().py ||= PYParser.createEnvScope());
+  }
+
+  pushToScope(content: PYParserResult): PYParserResult {
+    this.setupScope().value.push(content);
+    return content;
+  }
+
+  parse(content: string): PYParserResult {
     try {
-      const results = await this.runPythonShell(content, this.ENV());
-      return results ? results.join("\n") : "";
+      const results = this.runPythonShell(content, this.ENV());
+      return this.pushToScope({
+        format: "result",
+        content: results.then((t) => (t ? t.join("\n") : "")),
+      });
     } catch (err) {
       throw err;
     }
